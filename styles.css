@@ -1,20 +1,15 @@
-*{
-    box-sizing: border-box;
-}
 canvas{
     border: 1px solid black;
 }
 .container{
+    /*background-color: #999;*/
     width: 768px;
     margin: auto;
-    background-color: #999;
 }
 .row{
     display: flex;
 }
 .col{
     flex: 1;
-}
-.big{
-    flex: 2;
+    padding: 4px;
 }

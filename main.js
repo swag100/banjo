@@ -3,7 +3,7 @@ class Player{
         this.position = {x: x, y: y};
         this.velocity = {x: 0, y: 0};
 
-        this.speed = 0.25;
+        this.speed = 0.2;
         this.friction = 0.95; //slippery
 
         this.image = new Image();
@@ -14,28 +14,28 @@ class Player{
         this.animName = "down";
         this.animations = {
             "down": [
+                {x: 20, y: 0, w: 20, h: 31},
                 {x: 0, y: 0, w: 20, h: 31},
-                {x: 31, y: 0, w: 20, h: 31},
-                {x: 0, y: 0, w: 20, h: 31},
-                {x: 62, y: 0, w: 20, h: 31}
+                {x: 40, y: 0, w: 20, h: 31},
+                {x: 0, y: 0, w: 20, h: 31}
             ],
             "up": [
+                {x: 20, y: 31, w: 20, h: 31},
                 {x: 0, y: 31, w: 20, h: 31},
-                {x: 31, y: 31, w: 20, h: 31},
-                {x: 0, y: 31, w: 20, h: 31},
-                {x: 62, y: 31, w: 20, h: 31}
+                {x: 40, y: 31, w: 20, h: 31},
+                {x: 0, y: 31, w: 20, h: 31}
             ],
             "left": [
-                {x: 0, y: 62, w: 15, h: 30},
-                {x: 15, y: 62, w: 15, h: 30},
-                {x: 0, y: 62, w: 15, h: 30},
-                {x: 30, y: 62, w: 15, h: 30}
+                {x: 15, y: 62, w: 15, h: 30, xOff: 2, yOff: 1},
+                {x: 0, y: 62, w: 15, h: 30, xOff: 2, yOff: 1},
+                {x: 30, y: 62, w: 15, h: 30, xOff: 2, yOff: 1},
+                {x: 0, y: 62, w: 15, h: 30, xOff: 2, yOff: 1}
             ],
             "right": [
-                {x: 0, y: 92, w: 15, h: 30},
-                {x: 15, y: 92, w: 15, h: 30},
-                {x: 0, y: 92, w: 15, h: 30},
-                {x: 30, y: 92, w: 15, h: 30}
+                {x: 15, y: 92, w: 15, h: 30, xOff: 4, yOff: 1},
+                {x: 0, y: 92, w: 15, h: 30, xOff: 4, yOff: 1},
+                {x: 30, y: 92, w: 15, h: 30, xOff: 4, yOff: 1},
+                {x: 0, y: 92, w: 15, h: 30, xOff: 4, yOff: 1}
             ]
         };
     }
@@ -46,10 +46,18 @@ class Player{
         });
 
         //animation
-        if(vector.x){
-            this.animName = (vector.x > 0) ? "right" : "left";
-        }else if(vector.y){
+        if(vector.y){
             this.animName = (vector.y > 0) ? "down" : "up";
+        }else if(vector.x){
+            this.animName = (vector.x > 0) ? "right" : "left";
+        }
+
+        //increase frame
+        const magnitude = getMagnitude(this.velocity);
+        if(magnitude > 0.4){
+            this.animFrame += magnitude / 16;
+        }else{
+            this.animFrame = this.animations[this.animName].length - 1; // last
         }
 
         //move
@@ -65,15 +73,21 @@ class Player{
         this.position.y += this.velocity.y;
     }
     draw(ctx){
-        //drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)
-        const animation = this.animations[this.animName][this.animFrame];
+        const frame = Math.floor(this.animFrame) % this.animations[this.animName].length;
 
+        const animation = this.animations[this.animName][frame];
+        const offset = {
+            x: 'xOff' in animation ? animation.xOff : 0,
+            y: 'yOff' in animation ? animation.yOff : 0
+        };
+
+        //drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)
         ctx.drawImage(
             this.image, 
             animation.x, animation.y, 
             animation.w, animation.h, 
-            Math.floor(this.position.x), 
-            Math.floor(this.position.y), 
+            Math.floor(this.position.x) + offset.x, 
+            Math.floor(this.position.y) + offset.y, 
             animation.w, animation.h
         );
     }
@@ -123,9 +137,12 @@ document.addEventListener('keyup', (event) => {
     keysPressed[event.key] = false;
 });
 
+function getMagnitude(vector){
+    return Math.sqrt(vector.x ** 2 + vector.y ** 2);
 
+}
 function normalized(vector) {
-    const magnitude = Math.sqrt(vector.x ** 2 + vector.y ** 2);
+    const magnitude = getMagnitude(vector);
     if (magnitude === 0) {
         return {x: 0, y: 0};
     }
