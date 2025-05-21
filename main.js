@@ -45,6 +45,14 @@ class Player{
             y: keyDown('s') - keyDown('w')
         });
 
+        //animation
+        if(vector.x){
+            this.animName = (vector.x > 0) ? "right" : "left";
+        }else if(vector.y){
+            this.animName = (vector.y > 0) ? "down" : "up";
+        }
+
+        //move
         this.velocity.x += vector.x * this.speed;
         this.velocity.y += vector.y * this.speed;
 
