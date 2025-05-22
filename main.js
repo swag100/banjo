@@ -1,7 +1,66 @@
-class Player{
+class Entity{
     constructor(x,y){
         this.position = {x: x, y: y};
         this.velocity = {x: 0, y: 0};
+
+        this.hitbox = {x: 0, y: 0, w: 16, h: 8};
+    }
+    getHitbox(){
+        return {
+            x: Math.floor(this.position.x) + this.hitbox.x, 
+            y: Math.floor(this.position.y) + this.hitbox.y, 
+            w: this.hitbox.w,
+            h: this.hitbox.h
+        };
+    }
+    getCollisions() {
+        let collisions = [];
+
+        objects.forEach((obj) => {
+            const objRect = obj.getHitbox();
+            const myRect = this.getHitbox();
+
+            if (
+                myRect.x + myRect.w > objRect.x && 
+                myRect.x < objRect.x + objRect.w && 
+                myRect.y + myRect.h > objRect.y && 
+                myRect.y < objRect.y + objRect.h &&
+                obj != this
+            ) 
+            { 
+                collisions.push(obj); 
+            }
+        });
+
+        return collisions;
+    }
+    
+    collideX(){
+        this.getCollisions(objects).forEach((obj) => {
+            if(this.velocity.x){
+                if (this.velocity.x > 0) {
+                    this.position.x = obj.position.x - this.hitbox.w * 2;
+                }else{
+                    this.position.x = obj.position.x + obj.hitbox.w - this.hitbox.w;
+                }
+
+                this.velocity.x = 0;
+            }
+        });
+    }
+
+    update(){}
+
+    draw(ctx){
+        ctx.fillRect(...Object.values(this.getHitbox()));
+    }
+}
+
+class Player extends Entity{
+    constructor(x,y){
+        super(x,y);
+
+        this.hitbox = {x: 7, y: 18, w: 6, h: 12};
 
         this.speed = 0.2;
         this.friction = 0.95; //slippery
@@ -26,10 +85,10 @@ class Player{
                 {x: 0, y: 30, w: 20, h: 30}
             ],
             "left": [
-                {x: 15, y: 60, w: 15, h: 29, xOff: 2, yOff: -1},
-                {x: 0, y: 60, w: 15, h: 29, xOff: 2, yOff: 1},
-                {x: 30, y: 60, w: 15, h: 29, xOff: 2, yOff: -1},
-                {x: 0, y: 60, w: 15, h: 29, xOff: 2, yOff: 1}
+                {x: 15, y: 60, w: 15, h: 29, xOff: 1, yOff: -1},
+                {x: 0, y: 60, w: 15, h: 29, xOff: 1, yOff: 1},
+                {x: 30, y: 60, w: 15, h: 29, xOff: 1, yOff: -1},
+                {x: 0, y: 60, w: 15, h: 29, xOff: 1, yOff: 1}
             ],
             "right": [
                 {x: 15, y: 89, w: 15, h: 29, xOff: 4, yOff: -1},
@@ -70,7 +129,11 @@ class Player{
 
         //apply velocity
         this.position.x += this.velocity.x;
+        //this.collide("x");
+        this.collideX();
+
         this.position.y += this.velocity.y;
+        //this.collide("y");
     }
     draw(ctx){
         const frame = Math.floor(this.animFrame) % this.animations[this.animName].length;
@@ -90,6 +153,9 @@ class Player{
             Math.floor(this.position.y) + offset.y, 
             animation.w, animation.h
         );
+
+        //see hitbox
+        super.draw(ctx);
     }
 }
 
@@ -102,7 +168,8 @@ ctx.scale(2, 2);
 
 const keysPressed = {};
 const objects = [
-    new Player(0, 0)
+    new Player(0, 0),
+    new Entity(60, 60),
 ];
 
 function update(){
