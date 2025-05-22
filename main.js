@@ -14,28 +14,28 @@ class Player{
         this.animName = "down";
         this.animations = {
             "down": [
-                {x: 20, y: 0, w: 20, h: 31},
-                {x: 0, y: 0, w: 20, h: 31},
-                {x: 40, y: 0, w: 20, h: 31},
-                {x: 0, y: 0, w: 20, h: 31}
+                {x: 20, y: 0, w: 20, h: 30, yOff: -2},
+                {x: 0, y: 0, w: 20, h: 30},
+                {x: 40, y: 0, w: 20, h: 30, yOff: -2},
+                {x: 0, y: 0, w: 20, h: 30}
             ],
             "up": [
-                {x: 20, y: 31, w: 20, h: 31},
-                {x: 0, y: 31, w: 20, h: 31},
-                {x: 40, y: 31, w: 20, h: 31},
-                {x: 0, y: 31, w: 20, h: 31}
+                {x: 20, y: 30, w: 20, h: 30, yOff: -2},
+                {x: 0, y: 30, w: 20, h: 30},
+                {x: 40, y: 30, w: 20, h: 30, yOff: -2},
+                {x: 0, y: 30, w: 20, h: 30}
             ],
             "left": [
-                {x: 15, y: 62, w: 15, h: 30, xOff: 2, yOff: 1},
-                {x: 0, y: 62, w: 15, h: 30, xOff: 2, yOff: 1},
-                {x: 30, y: 62, w: 15, h: 30, xOff: 2, yOff: 1},
-                {x: 0, y: 62, w: 15, h: 30, xOff: 2, yOff: 1}
+                {x: 15, y: 60, w: 15, h: 29, xOff: 2, yOff: -1},
+                {x: 0, y: 60, w: 15, h: 29, xOff: 2, yOff: 1},
+                {x: 30, y: 60, w: 15, h: 29, xOff: 2, yOff: -1},
+                {x: 0, y: 60, w: 15, h: 29, xOff: 2, yOff: 1}
             ],
             "right": [
-                {x: 15, y: 92, w: 15, h: 30, xOff: 4, yOff: 1},
-                {x: 0, y: 92, w: 15, h: 30, xOff: 4, yOff: 1},
-                {x: 30, y: 92, w: 15, h: 30, xOff: 4, yOff: 1},
-                {x: 0, y: 92, w: 15, h: 30, xOff: 4, yOff: 1}
+                {x: 15, y: 89, w: 15, h: 29, xOff: 4, yOff: -1},
+                {x: 0, y: 89, w: 15, h: 29, xOff: 4, yOff: 1},
+                {x: 30, y: 89, w: 15, h: 29, xOff: 4, yOff: -1},
+                {x: 0, y: 89, w: 15, h: 29, xOff: 4, yOff: 1}
             ]
         };
     }
